@@ -1,3 +1,6 @@
+using APBD4;
+using Microsoft.AspNetCore.Mvc;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -13,6 +16,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.MapGet("/api/animals", () => Results.Ok(Db.Animals));
+app.MapGet("/api/animals/{animalId}", ([FromRoute] int animalId) =>
+{
+    var animal = Db.Animals.FirstOrDefault(e => e.Id == animalId);
+    return animal is null ? Results.NotFound() : Results.Ok(animal);
+});
 
 app.UseHttpsRedirection();
 
