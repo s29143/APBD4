@@ -37,6 +37,11 @@ app.MapPut("/api/animals/{animalId}", ([FromRoute] int animalId, [FromBody] Anim
         return Results.NotFound();
     }
 
+    animal.Category = body.Category;
+    animal.FirstName = body.FirstName;
+    animal.Color = body.Color;
+    animal.Weight = body.Weight;
+
     return Results.Ok();
 });
 
@@ -47,6 +52,13 @@ app.MapDelete("/api/animals/{animalId}", ([FromRoute] int animalId) => {
         return Results.NotFound();
     }
     return Db.Animals.Remove(animal) ? Results.NoContent() : Results.Conflict();
+});
+
+app.MapGet("/api/visits/{animalId}", ([FromRoute] int animalId) => Results.Ok(Db.Visits.FindAll(visit => visit.Animal.Id == animalId)));
+app.MapPost("/api/visits", ([FromBody] Visit body) =>
+{
+    Db.Visits.Add(body);
+    return Results.Created();
 });
 
 app.UseHttpsRedirection();

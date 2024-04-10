@@ -1,21 +1,12 @@
 ﻿namespace APBD4;
 
-public class Animal
+public class Animal(int id, string firstName, AnimalCategory category, double weight, string color)
 {
-    public Animal(int id, string firstName, AnimalCategory category, double weight, string color)
-    {
-        Id = id;
-        FirstName = firstName;
-        Category = category;
-        Weight = weight;
-        Color = color;
-    }
-
-    public int Id { get; set; }
-    public string FirstName { get; set; }
-    public AnimalCategory Category { get; set; }
-    public double Weight { get; set; }
-    public string Color { get; set; }
+    public int Id { get; set; } = id;
+    public string FirstName { get; set; } = firstName;
+    public AnimalCategory Category { get; set; } = category;
+    public double Weight { get; set; } = weight;
+    public string Color { get; set; } = color;
 }
 
 public enum AnimalCategory
