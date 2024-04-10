@@ -24,6 +24,31 @@ app.MapGet("/api/animals/{animalId}", ([FromRoute] int animalId) =>
     return animal is null ? Results.NotFound() : Results.Ok(animal);
 });
 
+app.MapPost("/api/animal", ([FromBody] Animal animal) => {
+    Db.Animals.Add(animal);
+    return Results.Created();
+});
+
+app.MapPut("/api/animals/{animalId}", ([FromRoute] int animalId, [FromBody] Animal body) =>
+{
+    var animal = Db.Animals.FirstOrDefault(e => e.Id == animalId);
+    if (animal is null)
+    {
+        return Results.NotFound();
+    }
+
+    return Results.Ok();
+});
+
+app.MapDelete("/api/animals/{animalId}", ([FromRoute] int animalId) => {
+    var animal = Db.Animals.FirstOrDefault(e => e.Id == animalId);
+    if (animal is null)
+    {
+        return Results.NotFound();
+    }
+    return Db.Animals.Remove(animal) ? Results.NoContent() : Results.Conflict();
+});
+
 app.UseHttpsRedirection();
 
 app.Run();
