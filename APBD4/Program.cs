@@ -18,9 +18,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapGet("/api/animals", () => Results.Ok(Db.Animals));
-app.MapGet("/api/animals/{animalId}", ([FromRoute] int animalId) =>
+app.MapGet("/api/animals/{id}", ([FromRoute] int id) =>
 {
-    var animal = Db.Animals.FirstOrDefault(e => e.Id == animalId);
+    var animal = Db.Animals.FirstOrDefault(e => e.Id == id);
     return animal is null ? Results.NotFound() : Results.Ok(animal);
 });
 
@@ -29,9 +29,9 @@ app.MapPost("/api/animal", ([FromBody] Animal animal) => {
     return Results.Created();
 });
 
-app.MapPut("/api/animals/{animalId}", ([FromRoute] int animalId, [FromBody] Animal body) =>
+app.MapPut("/api/animals/{id}", ([FromRoute] int id, [FromBody] Animal body) =>
 {
-    var animal = Db.Animals.FirstOrDefault(e => e.Id == animalId);
+    var animal = Db.Animals.FirstOrDefault(e => e.Id == id);
     if (animal is null)
     {
         return Results.NotFound();
@@ -45,8 +45,8 @@ app.MapPut("/api/animals/{animalId}", ([FromRoute] int animalId, [FromBody] Anim
     return Results.Ok();
 });
 
-app.MapDelete("/api/animals/{animalId}", ([FromRoute] int animalId) => {
-    var animal = Db.Animals.FirstOrDefault(e => e.Id == animalId);
+app.MapDelete("/api/animals/{id}", ([FromRoute] int id) => {
+    var animal = Db.Animals.FirstOrDefault(e => e.Id == id);
     if (animal is null)
     {
         return Results.NotFound();
@@ -54,7 +54,7 @@ app.MapDelete("/api/animals/{animalId}", ([FromRoute] int animalId) => {
     return Db.Animals.Remove(animal) ? Results.NoContent() : Results.Conflict();
 });
 
-app.MapGet("/api/visits/{animalId}", ([FromRoute] int animalId) => Results.Ok(Db.Visits.FindAll(visit => visit.Animal.Id == animalId)));
+app.MapGet("/api/visits", ([FromQuery] int animalId) => Results.Ok(Db.Visits.FindAll(visit => visit.Animal.Id == animalId)));
 app.MapPost("/api/visits", ([FromBody] Visit body) =>
 {
     Db.Visits.Add(body);
